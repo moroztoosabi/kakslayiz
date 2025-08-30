@@ -53,42 +53,58 @@
   <button id="shuffleBtn">SORUM GELSİN</button>
   <div id="question">Tap shuffle to get a question</div>
 
-  <script>
-    const questions = [
-      "What is the meaning of life?",
-      "What motivates you the most?",
-      "What is your biggest dream?",
-      "If you could travel anywhere, where would it be?",
-      "What do you value most in a friend?"
-      // Add up to 100 questions here
-    ];
+<script>
+  // Questions in both languages
+  const turkishQuestions = [
+    "Hayatın anlamı nedir?",
+    "Sizi en çok motive eden şey nedir?",
+    "En büyük hayaliniz nedir?",
+    "Her yere seyahat edebilseydiniz, nereye giderdiniz?",
+    "Bir arkadaşta en çok neyi önemsersiniz?"
+  ];
 
-    const logo = document.getElementById("logo");
-    const questionDiv = document.getElementById("question");
-    const shuffleBtn = document.getElementById("shuffleBtn");
+  const englishQuestions = [
+    "What is the meaning of life?",
+    "What motivates you the most?",
+    "What is your biggest dream?",
+    "If you could travel anywhere, where would it be?",
+    "What do you value most in a friend?"
+  ];
 
-let currentRotation = 0; // keep track of rotation
+  const logo = document.getElementById("logo");
+  const questionDiv = document.getElementById("question");
+  const shuffleBtn = document.getElementById("shuffleBtn");
 
-shuffleBtn.addEventListener("click", () => {
-  // Add 720 degrees to the current rotation
-  currentRotation += 720;
+  let currentRotation = 0; // for cumulative rotation
+  let isEnglish = false;   // current language toggle
 
-  // Rotate logo
-  logo.style.transition = "transform 5s";
-  logo.style.transform = `rotate(${currentRotation}deg)`;
+  // Tap logo to switch language
+  logo.addEventListener("click", () => {
+    isEnglish = !isEnglish; // toggle language
+    shuffleBtn.textContent = isEnglish ? "GET QUESTION" : "SORUM GELSİN";
+    // Optionally reset question text
+    questionDiv.textContent = isEnglish ? "Tap shuffle to get a question" : "Soru almak için tıkla";
+  });
 
-  // Show question after rotation finishes
-  setTimeout(() => {
-    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-    questionDiv.classList.remove("show");
+  shuffleBtn.addEventListener("click", () => {
+    // Rotate logo
+    currentRotation += 720;
+    logo.style.transition = "transform 5s";
+    logo.style.transform = `rotate(${currentRotation}deg)`;
+
+    // Show question after rotation
     setTimeout(() => {
-      questionDiv.textContent = randomQuestion;
-      questionDiv.classList.add("show");
-    }, 50);
-  }, 5000); // match rotation duration
-});
+      const questions = isEnglish ? englishQuestions : turkishQuestions;
+      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
 
-  </script>
+      questionDiv.classList.remove("show");
+      setTimeout(() => {
+        questionDiv.textContent = randomQuestion;
+        questionDiv.classList.add("show");
+      }, 50);
+    }, 5000); // match rotation duration
+  });
+</script>
 </body>
 </html>
 
