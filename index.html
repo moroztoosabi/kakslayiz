@@ -73,11 +73,7 @@
   logo.style.transform = "rotate(720deg)";
 
   // After the rotation finishes, reset rotation and show question
-  setTimeout(() => {
-    // Reset rotation to 0 for next time
-    logo.style.transition = "none";
-    logo.style.transform = "rotate(0deg)";
-
+  
     // Pick random question
     const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
     questionDiv.classList.remove("show");
