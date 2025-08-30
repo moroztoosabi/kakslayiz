@@ -50,7 +50,7 @@
 </head>
 <body>
   <img id="logo" src="yt pp 1.png" alt="Logo">
-  <button id="shuffleBtn">SORUM GELSIN</button>
+  <button id="shuffleBtn">SORUM GELSİN</button>
   <div id="question">Tap shuffle to get a question</div>
 
   <script>
@@ -67,21 +67,27 @@
     const questionDiv = document.getElementById("question");
     const shuffleBtn = document.getElementById("shuffleBtn");
 
-    shuffleBtn.addEventListener("click", () => {
-      // Rotate logo
-      logo.style.transform = "rotate(360deg)";
-      setTimeout(() => {
-        logo.style.transform = "rotate(0deg)";
-      }, 1000);
+  shuffleBtn.addEventListener("click", () => {
+  // Rotate logo 720 degrees
+  logo.style.transition = "transform 5s"; // duration: 5 seconds
+  logo.style.transform = "rotate(720deg)";
 
-      // Pick random question
-      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-      questionDiv.classList.remove("show");
-      setTimeout(() => {
-        questionDiv.textContent = randomQuestion;
-        questionDiv.classList.add("show");
-      }, 500);
-    });
+  // After the rotation finishes, reset rotation and show question
+  setTimeout(() => {
+    // Reset rotation to 0 for next time
+    logo.style.transition = "none";
+    logo.style.transform = "rotate(0deg)";
+
+    // Pick random question
+    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    questionDiv.classList.remove("show");
+    setTimeout(() => {
+      questionDiv.textContent = randomQuestion;
+      questionDiv.classList.add("show");
+    }, 50); // small delay for smoother effect
+  }, 2000); // match the transition duration
+});
+
   </script>
 </body>
 </html>
