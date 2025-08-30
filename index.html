@@ -1,165 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Question Shuffle</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      font-family: 'DIN Condensed', sans-serif;
-      background-color: #fff;
-      color: #000;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question Slot Machine</title>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'DIN Condensed', sans-serif;
+    background-color: #fff;
+    color: #000;
+  }
 
-    #logo {
-      width: 200px;
-      height: 200px;
-      margin-bottom: 20px;
-      transition: transform 1s ease;
-      cursor: pointer;
-    }
+  #logo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 1s ease;
+  }
 
-    #shuffleBtn {
-      padding: 15px 30px;
-      border: 2px solid black;
-      background: none;
-      font-size: 18px;
-      cursor: pointer;
-      margin-bottom: 40px;
-      transition: transform 0.1s;
-    }
+  #shuffleBtn {
+    padding: 15px 30px;
+    border: 2px solid black;
+    background: none;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 40px;
+    transition: transform 0.1s;
+  }
 
-    #shuffleBtn:active {
-      transform: scale(0.95);
-    }
+  #shuffleBtn:active {
+    transform: scale(0.95);
+  }
 
-    #question-container {
-      position: relative;
-      height: 60px;
-      width: 80%;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  #question-container {
+    position: relative;
+    height: 60px; /* height of one question */
+    width: 80%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .slide-question {
-      position: absolute;
-      width: 100%;
-      left: 0;
-      top: 0;
-      text-align: center;
-      font-size: 24px;
-      transition: top 0.1s linear, opacity 0.1s linear;
-    }
+  .slot {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    opacity: 0.3;
+    transition: opacity 0.1s;
+  }
 
-    .show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+  .middle {
+    opacity: 1 !important;
+  }
+
+  @keyframes spin {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-2000px); } /* adjust according to total height */
+  }
+</style>
 </head>
 <body>
-  <img id="logo" src="yt pp 1.png" alt="Logo">
-  <button id="shuffleBtn">SORUM GELSİN</button>
-  <div id="question-container">
-    <div id="question">Tap shuffle to get a question</div>
-  </div>
 
-  <script>
-    // Questions
-    const turkishQuestions = [
-      "Hayatın anlamı nedir?",
-      "Sizi en çok motive eden şey nedir?",
-      "En büyük hayaliniz nedir?",
-      "Her yere seyahat edebilseydiniz, nereye giderdiniz?",
-      "Bir arkadaşta en çok neyi önemsersiniz?"
-    ];
+<img id="logo" src="yt pp 1.png" alt="Logo">
+<button id="shuffleBtn">SORUM GELSİN</button>
+<div id="question-container"></div>
 
-    const englishQuestions = [
-      "What is the meaning of life?",
-      "What motivates you the most?",
-      "What is your biggest dream?",
-      "If you could travel anywhere, where would it be?",
-      "What do you value most in a friend?"
-    ];
+<script>
+const turkishQuestions = [
+  "Hayatın anlamı nedir?",
+  "Sizi en çok motive eden şey nedir?",
+  "En büyük hayaliniz nedir?",
+  "Her yere seyahat edebilseydiniz, nereye giderdiniz?",
+  "Bir arkadaşta en çok neyi önemsersiniz?"
+];
 
-    const logo = document.getElementById("logo");
-    const shuffleBtn = document.getElementById("shuffleBtn");
-    const questionContainer = document.getElementById("question-container");
+const englishQuestions = [
+  "What is the meaning of life?",
+  "What motivates you the most?",
+  "What is your biggest dream?",
+  "If you could travel anywhere, where would it be?",
+  "What do you value most in a friend?"
+];
 
-    let currentRotation = 0;
-    let isEnglish = false;
+const logo = document.getElementById("logo");
+const shuffleBtn = document.getElementById("shuffleBtn");
+const container = document.getElementById("question-container");
 
-    // Toggle language
-    logo.addEventListener("click", () => {
-      isEnglish = !isEnglish;
-      shuffleBtn.textContent = isEnglish ? "GET QUESTION" : "SORUM GELSİN";
-      questionContainer.innerHTML = '';
-      const placeholder = document.createElement("div");
-      placeholder.textContent = isEnglish ? "Tap shuffle to get a question" : "Soru almak için tıkla";
-      placeholder.id = "question";
-      questionContainer.appendChild(placeholder);
-    });
+let currentRotation = 0;
+let isEnglish = false;
 
-    // Shuffle button
-    shuffleBtn.addEventListener("click", () => {
-      currentRotation += 720;
-      logo.style.transition = "transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-      logo.style.transform = `rotate(${currentRotation}deg)`;
+// Toggle language
+logo.addEventListener("click", () => {
+  isEnglish = !isEnglish;
+  shuffleBtn.textContent = isEnglish ? "GET QUESTION" : "SORUM GELSİN";
+});
 
-      const questions = isEnglish ? englishQuestions : turkishQuestions;
+// Shuffle button
+shuffleBtn.addEventListener("click", () => {
+  currentRotation += 720;
+  logo.style.transition = "transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)";
+  logo.style.transform = `rotate(${currentRotation}deg)`;
 
-      // Pick 5 random questions for animation
-      const selectedIndexes = [];
-      for (let i = 0; i < 5; i++) {
-        selectedIndexes.push(Math.floor(Math.random() * questions.length));
-      }
+  const questions = isEnglish ? englishQuestions : turkishQuestions;
 
-      // Create slide questions
-      questionContainer.innerHTML = '';
-      const slideDivs = [];
-      selectedIndexes.forEach((idx, i) => {
-        const qDiv = document.createElement("div");
-        qDiv.classList.add("slide-question");
-        qDiv.textContent = questions[idx];
-        qDiv.style.top = `${i * 60}px`; // stack vertically
-        qDiv.style.opacity = i === 2 ? "1" : "0.3"; // middle full, top/bottom faded
-        questionContainer.appendChild(qDiv);
-        slideDivs.push(qDiv);
-      });
+  // Generate 30 questions randomly for slot effect
+  container.innerHTML = '';
+  const slotCount = 30;
+  const slots = [];
+  for(let i=0; i<slotCount; i++){
+    const idx = Math.floor(Math.random() * questions.length);
+    const div = document.createElement('div');
+    div.className = 'slot';
+    div.textContent = questions[idx];
+    div.style.top = `${i*60}px`; // stack vertically
+    container.appendChild(div);
+    slots.push(div);
+  }
 
-      // Animate sliding up
-      let moved = 0;
-      const slideInterval = setInterval(() => {
-        slideDivs.forEach((s) => {
-          const newTop = parseInt(s.style.top) - 10;
-          s.style.top = `${newTop}px`;
+  // Animate spinning
+  const totalHeight = slotCount * 60 - 60*15; // scroll so middle lands in view
+  container.style.transition = 'transform 5s cubic-bezier(0.25,0.1,0.25,1)';
+  container.style.transform = `translateY(-${totalHeight}px)`;
 
-          // Adjust opacity for middle
-          const distanceToMiddle = Math.abs(newTop - 120);
-          s.style.opacity = distanceToMiddle < 30 ? "1" : "0.3";
-        });
-        moved += 10;
-        if (moved >= 120) { // stop after moving one slot
-          clearInterval(slideInterval);
-
-          // Keep only middle question
-          questionContainer.innerHTML = '';
-          const finalQ = document.createElement("div");
-          finalQ.id = "question";
-          finalQ.classList.add("show");
-          finalQ.textContent = questions[selectedIndexes[2]];
-          questionContainer.appendChild(finalQ);
-        }
-      }, 50); // speed of slide
-    });
-  </script>
+  // After spin ends, show only the middle one
+  setTimeout(()=>{
+    container.innerHTML = '';
+    const middleIdx = Math.floor(Math.random()*questions.length);
+    const finalDiv = document.createElement('div');
+    finalDiv.textContent = questions[middleIdx];
+    finalDiv.className = 'slot middle';
+    container.appendChild(finalDiv);
+  }, 5000); // match logo rotation duration
+});
+</script>
 </body>
 </html>
