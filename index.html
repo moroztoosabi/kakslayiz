@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Question Slot Machine</title>
+<title>Smooth Question Slot Machine</title>
 <style>
   body {
     display: flex;
@@ -41,7 +41,7 @@
 
   #question-container {
     position: relative;
-    height: 60px; /* same as single question */
+    height: 60px;
     width: 80%;
     overflow: hidden;
     display: flex;
@@ -55,11 +55,16 @@
     text-align: center;
     font-size: 24px;
     opacity: 0.3;
-    transition: opacity 0.1s;
   }
 
   .middle {
     opacity: 1 !important;
+  }
+
+  /* Keyframe animation for smooth scroll */
+  @keyframes scroll {
+    from { transform: translateY(0); }
+    to { transform: translateY(-900px); } /* adjust dynamically in JS */
   }
 </style>
 </head>
@@ -107,46 +112,46 @@ shuffleBtn.addEventListener("click", () => {
 
   const questions = isEnglish ? englishQuestions : turkishQuestions;
 
-  // Generate 30 questions for fast slot effect
+  // Generate 30 questions for slot effect
   container.innerHTML = '';
   const slotCount = 30;
   const slots = [];
-
   for(let i=0; i<slotCount; i++){
     const idx = Math.floor(Math.random() * questions.length);
     const div = document.createElement('div');
     div.className = 'slot';
     div.textContent = questions[idx];
-    div.style.top = `${i*60}px`; // stack vertically inside container
+    div.style.top = `${i*60}px`; // stack vertically
     container.appendChild(div);
     slots.push(div);
   }
 
-  // Animate sliding
-  let start = 0;
-  const totalSlide = 60 * 15; // move 15 slots, middle one lands in center
-  const interval = setInterval(()=>{
-    slots.forEach(s => {
-      const newTop = parseInt(s.style.top) - 10; // move up 10px per frame
-      s.style.top = `${newTop}px`;
+  // Calculate total scroll distance so the middle question lands in center
+  const totalScroll = (slotCount - 15) * 60; // 15 = middle position
+  slots.forEach(s => {
+    s.style.animation = `scroll 5s cubic-bezier(0.25,0.1,0.25,1) forwards`;
+    s.style.animationName = 'scroll';
+    s.style.animationDuration = '5s';
+    s.style.animationFillMode = 'forwards';
+  });
 
-      // calculate distance to center (30px is middle of container)
-      const distanceToMiddle = Math.abs(newTop - 0); 
-      s.style.opacity = distanceToMiddle < 30 ? '1' : '0.3';
-    });
+  // Dynamically set keyframe in JS for precise scroll
+  const styleSheet = document.styleSheets[0];
+  const keyframes = `@keyframes scroll {
+    from { transform: translateY(0); }
+    to { transform: translateY(-${totalScroll}px); }
+  }`;
+  styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
-    start += 10;
-    if(start >= totalSlide){
-      clearInterval(interval);
-      // Show only middle question
-      const middleIdx = Math.floor(Math.random()*questions.length);
-      container.innerHTML = '';
-      const finalDiv = document.createElement('div');
-      finalDiv.textContent = questions[middleIdx];
-      finalDiv.className = 'slot middle';
-      container.appendChild(finalDiv);
-    }
-  }, 30); // smaller interval = faster spin
+  // After animation, show only middle question
+  setTimeout(()=>{
+    container.innerHTML = '';
+    const middleIdx = Math.floor(Math.random()*questions.length);
+    const finalDiv = document.createElement('div');
+    finalDiv.textContent = questions[middleIdx];
+    finalDiv.className = 'slot middle';
+    container.appendChild(finalDiv);
+  }, 5000); // match logo rotation
 });
 </script>
 </body>
