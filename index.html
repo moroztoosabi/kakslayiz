@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Shuffle</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'DIN Condensed', sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+
+    #logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+      transition: transform 1s ease;
+    }
+
+    #shuffleBtn {
+      padding: 15px 30px;
+      border: 2px solid black;
+      background: none;
+      font-size: 18px;
+      cursor: pointer;
+      margin-bottom: 40px;
+    }
+
+    #question {
+      font-size: 24px;
+      text-align: center;
+      max-width: 80%;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #question.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <img id="logo" src="your-logo.png" alt="Logo">
+  <button id="shuffleBtn">SHUFFLE</button>
+  <div id="question">Tap shuffle to get a question</div>
+
+  <script>
+    const questions = [
+      "What is the meaning of life?",
+      "What motivates you the most?",
+      "What is your biggest dream?",
+      "If you could travel anywhere, where would it be?",
+      "What do you value most in a friend?"
+      // Add up to 100 questions here
+    ];
+
+    const logo = document.getElementById("logo");
+    const questionDiv = document.getElementById("question");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+
+    shuffleBtn.addEventListener("click", () => {
+      // Rotate logo
+      logo.style.transform = "rotate(360deg)";
+      setTimeout(() => {
+        logo.style.transform = "rotate(0deg)";
+      }, 1000);
+
+      // Pick random question
+      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+      questionDiv.classList.remove("show");
+      setTimeout(() => {
+        questionDiv.textContent = randomQuestion;
+        questionDiv.classList.add("show");
+      }, 500);
+    });
+  </script>
+</body>
+</html>
 
