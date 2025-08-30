@@ -67,20 +67,25 @@
     const questionDiv = document.getElementById("question");
     const shuffleBtn = document.getElementById("shuffleBtn");
 
- shuffleBtn.addEventListener("click", () => {
-  // Rotate logo 720 degrees over 5 seconds
-  logo.style.transition = "transform 5s";
-  logo.style.transform = "rotate(720deg)";
+let currentRotation = 0; // keep track of rotation
 
-  // Show question after the rotation finishes
+shuffleBtn.addEventListener("click", () => {
+  // Add 720 degrees to the current rotation
+  currentRotation += 720;
+
+  // Rotate logo
+  logo.style.transition = "transform 5s";
+  logo.style.transform = `rotate(${currentRotation}deg)`;
+
+  // Show question after rotation finishes
   setTimeout(() => {
     const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
     questionDiv.classList.remove("show");
     setTimeout(() => {
       questionDiv.textContent = randomQuestion;
       questionDiv.classList.add("show");
-    }, 50); // small delay for smoother effect
-  }, 5000); // match the 5s rotation duration
+    }, 50);
+  }, 5000); // match rotation duration
 });
 
   </script>
