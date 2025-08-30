@@ -72,8 +72,7 @@
   logo.style.transition = "transform 5s"; // duration: 5 seconds
   logo.style.transform = "rotate(720deg)";
 
-  // After the rotation finishes, reset rotation and show question
-  
+  // After the rotation finishes, show question  
     // Pick random question
     const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
     questionDiv.classList.remove("show");
