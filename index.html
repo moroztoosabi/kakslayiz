@@ -41,7 +41,7 @@
 
   #question-container {
     position: relative;
-    height: 60px; /* height of one question */
+    height: 60px; /* same as single question */
     width: 80%;
     overflow: hidden;
     display: flex;
@@ -60,11 +60,6 @@
 
   .middle {
     opacity: 1 !important;
-  }
-
-  @keyframes spin {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-2000px); } /* adjust according to total height */
   }
 </style>
 </head>
@@ -112,34 +107,46 @@ shuffleBtn.addEventListener("click", () => {
 
   const questions = isEnglish ? englishQuestions : turkishQuestions;
 
-  // Generate 30 questions randomly for slot effect
+  // Generate 30 questions for fast slot effect
   container.innerHTML = '';
   const slotCount = 30;
   const slots = [];
+
   for(let i=0; i<slotCount; i++){
     const idx = Math.floor(Math.random() * questions.length);
     const div = document.createElement('div');
     div.className = 'slot';
     div.textContent = questions[idx];
-    div.style.top = `${i*60}px`; // stack vertically
+    div.style.top = `${i*60}px`; // stack vertically inside container
     container.appendChild(div);
     slots.push(div);
   }
 
-  // Animate spinning
-  const totalHeight = slotCount * 60 - 60*15; // scroll so middle lands in view
-  container.style.transition = 'transform 5s cubic-bezier(0.25,0.1,0.25,1)';
-  container.style.transform = `translateY(-${totalHeight}px)`;
+  // Animate sliding
+  let start = 0;
+  const totalSlide = 60 * 15; // move 15 slots, middle one lands in center
+  const interval = setInterval(()=>{
+    slots.forEach(s => {
+      const newTop = parseInt(s.style.top) - 10; // move up 10px per frame
+      s.style.top = `${newTop}px`;
 
-  // After spin ends, show only the middle one
-  setTimeout(()=>{
-    container.innerHTML = '';
-    const middleIdx = Math.floor(Math.random()*questions.length);
-    const finalDiv = document.createElement('div');
-    finalDiv.textContent = questions[middleIdx];
-    finalDiv.className = 'slot middle';
-    container.appendChild(finalDiv);
-  }, 5000); // match logo rotation duration
+      // calculate distance to center (30px is middle of container)
+      const distanceToMiddle = Math.abs(newTop - 0); 
+      s.style.opacity = distanceToMiddle < 30 ? '1' : '0.3';
+    });
+
+    start += 10;
+    if(start >= totalSlide){
+      clearInterval(interval);
+      // Show only middle question
+      const middleIdx = Math.floor(Math.random()*questions.length);
+      container.innerHTML = '';
+      const finalDiv = document.createElement('div');
+      finalDiv.textContent = questions[middleIdx];
+      finalDiv.className = 'slot middle';
+      container.appendChild(finalDiv);
+    }
+  }, 30); // smaller interval = faster spin
 });
 </script>
 </body>
