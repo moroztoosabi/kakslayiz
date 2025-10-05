@@ -65,10 +65,25 @@
     from { transform: translateY(0); }
     to { transform: translateY(-900px); }
   }
+    #handle {
+    position: fixed;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+    font-family: 'DIN Condensed', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #000;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  #handle:hover {
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
-
+<div id="handle">@kakslayiz</div>
 <img id="logo" src="yt pp 1.png" alt="Logo">
 <button id="shuffleBtn">SORUM GELSİN</button>
 <div id="question-container"></div>
