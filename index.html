@@ -5,6 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smooth Question Slot Machine</title>
 <style>
+    /* Force button text color and prevent iOS Safari blue auto-coloring */
+  button, 
+  button:visited, 
+  button:focus, 
+  button:active {
+    color: #000 !important;
+    text-decoration: none !important;
+    -webkit-text-fill-color: #000 !important; /* Fixes iOS Safari blue tint */
+  }
+
+  /* Prevent Safari from auto-linking or coloring text like phone numbers, etc. */
+  body {
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a, a:visited {
+    color: inherit;
+    text-decoration: none;
+  }
+
   body {
     display: flex;
     flex-direction: column;
@@ -87,7 +109,6 @@
 <img id="logo" src="yt pp 1.png" alt="Logo">
 <button id="shuffleBtn">SORUM GELSİN</button>
 <div id="question-container"></div>
-
 <script>
 const turkishQuestions = [
   "Bir gün kendi markanı kursan ne olurdu?",
